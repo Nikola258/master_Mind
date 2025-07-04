@@ -1,20 +1,28 @@
 #!/bin/python3
 # MasterMind
 # by ICTROCN
-# v1.01
+# v1.02
 # 15-8-2024
-# Last mod by DevJan : added loop for replay
-print("MasterMind")
+# Last mod by ChatGPT : added user story 1 - code generation with docstring and test prints
 
 import random
 
 def generate_Code(length=4, digits=6):
+    """
+    Genereert een willekeurige geheime code.
+    
+    Args:
+        length (int): Lengte van de code.
+        digits (int): Maximaal cijfer (1 tot digits).
+    
+    Returns:
+        list: Lijst met string cijfers als code.
+    """
     return [str(random.randint(1, digits)) for _ in range(length)]
 
 def get_Feedback(secret, guess):
     black_Pegs = sum(s == g for s, g in zip(secret, guess))
     
-    # Count whites by subtracting black and calculating min digit frequency match
     secret_Counts = {}
     guess_Counts = {}
 
@@ -56,8 +64,12 @@ def play_Mastermind():
     print(f"Sorry, you've used all attempts. The correct code was: {''.join(secret_Code)}")
 
 if __name__ == "__main__":
+    # User Story 1 test: print some generated codes to check randomness
+    print("Test: Generated codes for User Story 1")
+    for _ in range(3):
+        print(generate_Code())
+    
     again = 'Y'
-    while again == 'Y' :
+    while again == 'Y':
         play_Mastermind()
-        again  = input (f"Play again (Y/N) ?").upper()
-
+        again = input("Play again (Y/N)? ").upper()
