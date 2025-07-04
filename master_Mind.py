@@ -1,9 +1,9 @@
 #!/bin/python3
 # MasterMind
 # by ICTROCN
-# v1.02
+# v1.03
 # 15-8-2024
-# Last mod by ChatGPT : added user story 1 - code generation with docstring and test prints
+# Last mod by ChatGPT : added user story 2 - improved input validation and error messages
 
 import random
 
@@ -19,6 +19,13 @@ def generate_Code(length=4, digits=6):
         list: Lijst met string cijfers als code.
     """
     return [str(random.randint(1, digits)) for _ in range(length)]
+
+def is_valid_guess(guess, length=4, digits="123456"):
+    """
+    Controleert of de gok geldig is.
+    Geeft True terug als guess 4 cijfers lang is en alleen cijfers uit digits bevat.
+    """
+    return len(guess) == length and all(c in digits for c in guess)
 
 def get_Feedback(secret, guess):
     black_Pegs = sum(s == g for s, g in zip(secret, guess))
@@ -46,13 +53,17 @@ def play_Mastermind():
 
     for attempt in range(1, attempts + 1):
         guess = ""
-        valid_Guess = False
-        while not valid_Guess:
+        while True:
             guess = input(f"Attempt {attempt}: ").strip()
-            valid_Guess = len(guess) == 4 and all(c in "123456" for c in guess)
-            if not valid_Guess:
-                print("Invalid input. Enter 4 digits, each from 1 to 6.")
-            show_Secret(secret_Code) if guess == "cheat" else False
+            
+            if guess == "cheat":
+                show_Secret(secret_Code)
+                continue
+            
+            if not is_valid_guess(guess):
+                print("Invalid input! Please enter exactly 4 digits, each between 1 and 6.")
+            else:
+                break
 
         black, white = get_Feedback(secret_Code, guess)
         print(f"Black pegs (correct position): {black}, White pegs (wrong position): {white}")
@@ -68,7 +79,7 @@ if __name__ == "__main__":
     print("Test: Generated codes for User Story 1")
     for _ in range(3):
         print(generate_Code())
-    
+
     again = 'Y'
     while again == 'Y':
         play_Mastermind()
